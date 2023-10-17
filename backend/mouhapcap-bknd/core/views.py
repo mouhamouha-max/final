@@ -9,8 +9,6 @@ import re
 from datetime import datetime
 from decimal import Decimal
 from scapy.layers.inet import IP
-from django.contrib.auth.models import User
-
 
 class UploadAndAnalyzePCAPView(APIView):
     max_data_list_size = 999  # Définissez la taille maximale de la liste
@@ -41,6 +39,7 @@ class UploadAndAnalyzePCAPView(APIView):
             'summary': None,
             'time': packet_time,
             'arrival_time': None,
+            'response_status': None  # Ajout du response_status
         }
 
         hex_content = binascii.hexlify(packet.load).decode('utf-8')
@@ -78,6 +77,12 @@ class UploadAndAnalyzePCAPView(APIView):
                     summary_parts.append(f"To: {sip_info['to']}")
 
                 sip_info['summary'] = ", ".join(summary_parts)
+
+                # Ajout du response_status
+                response_status_match = re.search(r'SIP/2.0 (\d{3})', sip)
+                if response_status_match:
+                    response_status = response_status_match.group(1)
+                    sip_info['response_status'] = response_status
 
             except Exception as e:
                 print("Error while extracting SIP info:", e)
@@ -128,7 +133,6 @@ class UploadAndAnalyzePCAPView(APIView):
 
         return Response(data_list, status=status.HTTP_201_CREATED)
 
-
 class AnalysisResultsAPI(APIView):
     def get(self, request):
         latest_file_identifier = max(UploadAndAnalyzePCAPView.file_analyzed_packets.keys(), default=None)
@@ -140,9 +144,3 @@ class AnalysisResultsAPI(APIView):
             return Response(data_list, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'No data available.'}, status=status.HTTP_404_NOT_FOUND)
-
-class RegisterUser(APIView):
-    def post(self, request):
-        user = User.objects.create_user(request.name, request.email, request.password)
-        user.save()
-
