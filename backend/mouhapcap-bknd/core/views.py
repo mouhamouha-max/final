@@ -43,6 +43,7 @@ class UploadAndAnalyzePCAPView(APIView):
             'summary': None,
             'time': packet_time,
             'arrival_time': None,
+            'response_status': None  # Ajout du response_status
         }
 
         hex_content = binascii.hexlify(packet.load).decode('utf-8')
@@ -80,6 +81,12 @@ class UploadAndAnalyzePCAPView(APIView):
                     summary_parts.append(f"To: {sip_info['to']}")
 
                 sip_info['summary'] = ", ".join(summary_parts)
+
+                # Ajout du response_status
+                response_status_match = re.search(r'SIP/2.0 (\d{3})', sip)
+                if response_status_match:
+                    response_status = response_status_match.group(1)
+                    sip_info['response_status'] = response_status
 
             except Exception as e:
                 print("Error while extracting SIP info:", e)
@@ -129,7 +136,6 @@ class UploadAndAnalyzePCAPView(APIView):
         self.file_analyzed_packets[file_identifier] = data_list
 
         return Response(data_list, status=status.HTTP_201_CREATED)
-
 
 class AnalysisResultsAPI(APIView):
     def get(self, request):
