@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
-    'corsheaders',
+    'corsheaders',  
+    "djoser",
     
 ]
 
@@ -74,17 +75,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pcap_api.wsgi.application'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'mouha',
+#         'USER': 'postgres',
+#         'HOST': 'localhost',  # Adresse du serveur PostgreSQL
+#         'PORT': '5432',  # Port PostgreSQL par défaut
+#         'PASSWORD': 'mouha',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mouha',
-        'USER': 'postgres',
-        'HOST': 'localhost',  # Adresse du serveur PostgreSQL
-        'PORT': '5432',  # Port PostgreSQL par défaut
-        'PASSWORD': 'mouha',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 
 
@@ -133,3 +139,27 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
+
+
+}
+DJOSER = {
+    'LOGIN_FIELD': 'username',  
+    'USER_CREATE_PASSWORD_RETYPE': True,  # Enable password retype during registration
+    'SERIALISERS': {
+        'user_create': 'api.serializers.UserSerializer',
+        'user': 'api.serializers.UserSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    }
+}
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    
+}

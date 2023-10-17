@@ -10,8 +10,10 @@ from datetime import datetime
 from decimal import Decimal
 from scapy.layers.inet import IP
 from django.contrib.auth.models import User
-
-
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 class UploadAndAnalyzePCAPView(APIView):
     max_data_list_size = 999  # Définissez la taille maximale de la liste
     file_analyzed_packets = {}
@@ -140,9 +142,40 @@ class AnalysisResultsAPI(APIView):
             return Response(data_list, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'No data available.'}, status=status.HTTP_404_NOT_FOUND)
+@api_view(['POST'])
+def register(request):
+    if request.method == "POST":
 
-class RegisterUser(APIView):
-    def post(self, request):
-        user = User.objects.create_user(request.name, request.email, request.password)
-        user.save()
+        username = request.data['username']
+        email = request.data['email']
+        password = request.data['password']
+        password2 = request.data['password2']
+        if User.objects.filter(username=username).first():
+            
 
+            return JsonResponse({'message': 'An account with this username already exists.Please choose a different username address.'},status=status.HTTP_400_BAD_REQUEST)
+        if password!=password2:
+            
+            return JsonResponse({'message': 'passwords did not match.'},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                email=email,
+            )
+            
+        # Return a success response
+        return JsonResponse({'message': 'Registration successful'},status=status.HTTP_200_OK)
+    # Return an error response for other request methods
+    return JsonResponse({'message': 'Invalid request method'},status=status.HTTP_405_METHOD_NOT_ALLOWED)
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['email'] = user.email
+        token['username'] = user.username
+
+        return token
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer

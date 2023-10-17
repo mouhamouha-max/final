@@ -1,7 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-export const UploadPage = () => {
+ const UploadPage = () => {
 
 
     const [selectedFile, setSelectedFile] = useState(null);
@@ -66,16 +66,16 @@ export const UploadPage = () => {
         });
     };
     return (
-       <div>
-                <h1>
+       <div className="text-center mt-20">
+                <h1 className="text-3xl my-10">
                     Select Packet file to analyze
                 </h1>
-                <h3>
+                <h3 className="my-6">
                     File Upload
                 </h3>
                 <div>
                     <input style={{marginRight:"20px"}} type="file" onChange={onFileChange} accept={".pcap"} />
-                    <button onClick={onFileUpload}>
+                    <button className="border-2 border-black px-8 py-4 rounded-xl" onClick={onFileUpload}>
                         Upload!
                     </button>
                 </div>
@@ -83,3 +83,4 @@ export const UploadPage = () => {
             </div>
     )
 }
+export default UploadPage;

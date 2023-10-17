@@ -27,7 +27,7 @@ h11==0.14.0
 idna==3.4
 lxml==4.9.3
 mongoengine==0.27.0
-mysqlclient==2.1.1
+
 node==1.2.1
 npm==0.1.1
 odict==1.9.0
@@ -35,7 +35,7 @@ optional-django==0.1.0
 packaging==23.1
 platformdirs==3.9.1
 plumber==1.7
-psycopg2==2.9.7
+
 psycopg2-binary==2.9.7
 pydantic==1.10.7
 pymongo==4.5.0

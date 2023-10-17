@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
 
 
-export const GraphPage = () => {
+const GraphPage = () => {
 
 
     const { toPDF, targetRef } = usePDF({filename: 'page.pdf'});
@@ -236,3 +236,4 @@ const handleClick =(i)=>{
         </div>
     )
 }
+export default GraphPage

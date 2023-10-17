@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {Fragment, useRef,useState,useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
     Button,
@@ -11,28 +11,35 @@ import {
     TextField
 } from "@mui/material";
 import {ExpandLess, ExpandMore, StarBorder} from "@mui/icons-material";
-export const AnalyzePage = () => {
+
+import { Dialog, Transition } from '@headlessui/react'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import axios from "axios";
+import baseURL from "../utils/BaseURL";
+const AnalyzePage = () => {
 
     const navigate = useNavigate();
     const { state } = useLocation();
     const list = state.map((e)=>false)
     const [buttonsMap, setButtonsMap] = useState(list);
-
+    const [data,setData]=useState({})
     const [open, setOpen] = useState(true);
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
     const [packetsList,setPacketsList] = useState(state)
     const headers = ["No","Time","Source","Destination","Protocol","Length","Sequence Number","Info"];
     const dayjs = require('dayjs')
+    const getStatistics=async()=>{
+        const res= axios.get(`${baseURL}/sip-statistics/`).then(response=>setData(response.data))
+    }
 
-
-    // useEffect(()=>{
-    //
-    //     state.map((e,i)=>{
-    //         buttonsMap.set(i,false)
-    //     });
-    //     console.log(buttonsMap)
-    // })
+    useEffect(()=>{
+        getStatistics()
+        // state.map((e,i)=>{
+        //     buttonsMap.set(i,false)
+        // });
+        // console.log(buttonsMap)
+    },[])
 
  const handleFilter = () => {
 
@@ -65,7 +72,9 @@ export const AnalyzePage = () => {
 
     }
 
+    const [openm, setOpenm] = useState(false)
 
+    const cancelButtonRef = useRef(null)
 
 const handleNav = ()=>{
 
@@ -86,19 +95,174 @@ const handleNav = ()=>{
   };
 
     return (
-        <div>
+        <div className="mt-20">
+            <Transition.Root show={openm} as={Fragment}>
+      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpenm}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full  items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <Dialog.Panel className="relative  transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    
+                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                      <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
+                      General statistics
+                      </Dialog.Title>
+                      <div className="mt-2 flex flex-wrap">
+                        <p className="text-sm text-gray-500  p-4">
+                        invite count: {data?.general_statistics?.invite_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        ack count: {data?.general_statistics?.ack_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        options count: {data?.general_statistics?.options_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        byte count: {data?.general_statistics?.bye_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        cancel count: {data?.general_statistics?.cancel_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        prack count: {data?.general_statistics?.prack_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        info count: {data?.general_statistics?.info_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        client error count: {data?.general_statistics?.client_error_count}
+                        </p>
+                        <p className="text-sm text-gray-500 p-4">
+                        server error count: {data?.general_statistics?.server_error_count}
+                        </p>
+                      </div>
+                      <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
+                      Client errors
+                      </Dialog.Title>
+                      <div className="mt-2 flex flex-wrap">
+                        <p className="text-sm text-gray-500  p-4">
+                        400 Bad Request: {data?.client_errors?.["400"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        401 Unauthorized: {data?.client_errors["401"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        403 Forbidden: {data?.client_errors["403"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        404 Not Found: {data?.client_errors["404"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        405 Method Not Allowed: {data?.client_errors["405"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        407 Proxy Authentication Required: {data?.client_errors["407"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        408 Request Timeout: {data?.client_errors["408"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        436 Bad Identity Info: {data?.client_errors["436"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        480 Temporarily Unavailable: {data?.client_errors["480"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        481 Call/Transaction Does Not Exist: {data?.client_errors["481"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        486 Busy Here: {data?.client_errors["486"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        484 Address Incomplete: {data?.client_errors["484"]?.count}
+                        </p>
+              
+                      
+                      </div>
+                      <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
+                      Server errors
+                      </Dialog.Title>
+                      <div className="mt-2 flex flex-wrap">
+                        <p className="text-sm text-gray-500  p-4">
+                        500 Internal Server Error: {data?.server_errors["500"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        501 Not Implemented: {data?.server_errors["501"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        502 Bad Gateway or Proxy Error: {data?.server_errors["502"]?.count}
+                        </p>
+                        <p className="text-sm text-gray-500  p-4">
+                        503 Service Unavailable: {data?.server_errors["503"]?.count}
+                        </p>
+                       
+              
+                      
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <button
+                    type="button"
+                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                    onClick={() => setOpenm(false)}
+                  >
+                    Deactivate
+                  </button>
+                  <button
+                    type="button"
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    onClick={() => setOpenm(false)}
+                    ref={cancelButtonRef}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition.Root>
             <div style={{width:"100%",display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
                 <TextField style={{width:"260px", height:"50px"}} variant={"outlined"} label={"From"} onChange={(event) => {
-    setSource(event.target.value);
-  }}></TextField>
+                        setSource(event.target.value);
+                    }}></TextField>
 
                 <TextField style={{width:"260px", height:"50px"}}  label={"To"} onChange={(event) => {
-    setDestination(event.target.value);
-  }}></TextField>
-                <Button onClick={handleFilter} variant="contained"  style={{backgroundColor:"black", width:"260px", height:"50px"}}> Filter</Button>
+                        setDestination(event.target.value);
+                    }}></TextField>
+                <div className="flex justify-between">
+                <a onClick={handleFilter} className="bg-black text-white py-3 w-40 rounded-lg text-center mr-8 cursor-pointer">Filter</a>
+                <a onClick={()=>setOpenm(true)} className="bg-black text-white py-3 w-40 rounded-lg text-center cursor-pointer mr-8">Statistics</a>
+                {(source!="" || destination!="")?<a  onClick={handleNav} className="bg-black text-white py-3 w-40 rounded-lg text-center cursor-pointer ">Trace Graph</a>:''}
+                </div>
             </div>
             <br/>
-            {(source!="" || destination!="")?<Button onClick={handleNav}> Trace Graph</Button>:<div></div>}
+       
             <br/><br/><br/>
 
 <List dense={true}
@@ -153,3 +317,4 @@ const handleNav = ()=>{
     </div>
         )
 }
+export default AnalyzePage
