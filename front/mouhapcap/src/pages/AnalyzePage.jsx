@@ -129,7 +129,7 @@ const handleNav = ()=>{
                       <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
                       General statistics
                       </Dialog.Title>
-                      <div className="mt-2 flex flex-wrap">
+                      <div className="mt-2 ">
                         <p className="text-sm text-gray-500  p-4">
                         invite count: {data?.general_statistics?.invite_count}
                         </p>
@@ -161,42 +161,42 @@ const handleNav = ()=>{
                       <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
                       Client errors
                       </Dialog.Title>
-                      <div className="mt-2 flex flex-wrap">
+                      <div className="mt-2 ">
                         <p className="text-sm text-gray-500  p-4">
-                        400 Bad Request: {data?.client_errors?.["400"]?.count}
+                        400 Bad Request: {data?.client_errors?.c400?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        401 Unauthorized: {data?.client_errors["401"]?.count}
+                        401 Unauthorized: {data?.client_errors?.c401?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        403 Forbidden: {data?.client_errors["403"]?.count}
+                        403 Forbidden: {data?.client_errors?.c403?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        404 Not Found: {data?.client_errors["404"]?.count}
+                        404 Not Found: {data?.client_errors?.c404?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        405 Method Not Allowed: {data?.client_errors["405"]?.count}
+                        405 Method Not Allowed: {data?.client_errors?.c405?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        407 Proxy Authentication Required: {data?.client_errors["407"]?.count}
+                        407 Proxy Authentication Required: {data?.client_errors?.c407?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        408 Request Timeout: {data?.client_errors["408"]?.count}
+                        408 Request Timeout: {data?.client_errors?.c408?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        436 Bad Identity Info: {data?.client_errors["436"]?.count}
+                        436 Bad Identity Info: {data?.client_errors?.c436?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        480 Temporarily Unavailable: {data?.client_errors["480"]?.count}
+                        480 Temporarily Unavailable: {data?.client_errors?.c480?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        481 Call/Transaction Does Not Exist: {data?.client_errors["481"]?.count}
+                        481 Call/Transaction Does Not Exist: {data?.client_errors?.c481?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        486 Busy Here: {data?.client_errors["486"]?.count}
+                        486 Busy Here: {data?.client_errors?.c486?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        484 Address Incomplete: {data?.client_errors["484"]?.count}
+                        484 Address Incomplete: {data?.client_errors?.c484?.count}
                         </p>
               
                       
@@ -204,18 +204,18 @@ const handleNav = ()=>{
                       <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
                       Server errors
                       </Dialog.Title>
-                      <div className="mt-2 flex flex-wrap">
+                      <div className="mt-2 ">
                         <p className="text-sm text-gray-500  p-4">
-                        500 Internal Server Error: {data?.server_errors["500"]?.count}
+                        500 Internal Server Error: {data?.server_errors?.c500?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        501 Not Implemented: {data?.server_errors["501"]?.count}
+                        501 Not Implemented: {data?.server_errors?.c501?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        502 Bad Gateway or Proxy Error: {data?.server_errors["502"]?.count}
+                        502 Bad Gateway or Proxy Error: {data?.server_errors?.c502?.count}
                         </p>
                         <p className="text-sm text-gray-500  p-4">
-                        503 Service Unavailable: {data?.server_errors["503"]?.count}
+                        503 Service Unavailable: {data?.server_errors?.c503?.count}
                         </p>
                        
               
@@ -230,16 +230,9 @@ const handleNav = ()=>{
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => setOpenm(false)}
                   >
-                    Deactivate
+                    Close
                   </button>
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setOpenm(false)}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
+                 
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -282,7 +275,7 @@ const handleNav = ()=>{
         <ListItemText style={{overflow:"clip"}}>{e.sip_info.src_ip.trim()}</ListItemText>
       <ListItemText style={{overflow:"clip"}}>{e.sip_info.dst_ip.trim()}</ListItemText>
          <ListItemText>SIP/SDP</ListItemText>
-          <ListItemText>{( e.sip_info.body != null)?e.sip_info.body.length:"NaN"}</ListItemText>
+          <ListItemText>{e.sip_info?.body?.length}</ListItemText>
                   <ListItemText>seq_number</ListItemText>
 
          <ListItemText>{(typeof e.sip_info.summary === 'string')?e.sip_info.summary.split(",")[0]:"NaN"}</ListItemText>

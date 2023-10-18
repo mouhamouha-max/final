@@ -5,22 +5,22 @@ from .views import UploadAndAnalyzePCAPView
 
 # Dictionnaire de descriptions pour les codes d'erreur
 error_descriptions = {
-    "400": "Bad Request",
-    "401": "Unauthorized",
-    "403": "Forbidden",
-    "404": "Not Found",
-    "405": "Method Not Allowed",
-    "407": "Proxy Authentication Required",
-    "408": "Request Timeout",
-    "436": "Bad Identity Info",
-    "480": "Temporarily Unavailable",
-    "481": "Call/Transaction Does Not Exist",
-    "486": "Busy Here",
-    "484": "Address Incomplete",
-    "500": "Internal Server Error",
-    "501": "Not Implemented",
-    "502": "Bad Gateway or Proxy Error",
-    "503": "Service Unavailable",
+    "c400": "Bad Request",
+    "c401": "Unauthorized",
+    "c403": "Forbidden",
+    "c404": "Not Found",
+    "c405": "Method Not Allowed",
+    "c407": "Proxy Authentication Required",
+    "c408": "Request Timeout",
+    "c436": "Bad Identity Info",
+    "c480": "Temporarily Unavailable",
+    "c481": "Call/Transaction Does Not Exist",
+    "c486": "Busy Here",
+    "c484": "Address Incomplete",
+    "c500": "Internal Server Error",
+    "c501": "Not Implemented",
+    "c502": "Bad Gateway or Proxy Error",
+    "c503": "Service Unavailable",
 }
 
 class StatisticsView(APIView):
@@ -39,8 +39,8 @@ class StatisticsView(APIView):
         server_error_count = 0
 
         # Initialisation des compteurs d'erreurs client et serveur
-        client_error_counts = {code: 0 for code in error_descriptions if code.startswith("4")}
-        server_error_counts = {code: 0 for code in error_descriptions if code.startswith("5")}
+        client_error_counts = {code: 0 for code in error_descriptions if code.startswith("c4")}
+        server_error_counts = {code: 0 for code in error_descriptions if code.startswith("c5")}
 
         for packet_data in latest_data:
             sip_info = packet_data['sip_info']
@@ -64,11 +64,11 @@ class StatisticsView(APIView):
                 info_count += 1
 
             # Calcul des erreurs client
-            if response_status and response_status.startswith('4'):
+            if response_status and response_status.startswith('c4'):
                 client_error_count += 1
 
             # Calcul des erreurs serveur
-            if response_status and response_status.startswith('5'):
+            if response_status and response_status.startswith('c5'):
                 server_error_count += 1
 
             # Comptage des erreurs client
