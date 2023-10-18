@@ -39,8 +39,8 @@
 .graph_arl:after {
   content: '';
   position: absolute;
-  left: 868px;
-  top: 20px;
+  left: 848px;
+  top: 36px;
   width: 0;
   height: 0;
   border-width: 5px 0 5px 18px;
@@ -51,7 +51,7 @@
   content: '';
   position: absolute;
   left: -2px;
-  top: 20px;
+  top: 36px;
   width: 0;
   height: 0;
   border-width: 5px 18px 5px 0px;

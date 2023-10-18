@@ -16,6 +16,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import axios from "axios";
 import baseURL from "../utils/BaseURL";
+import toast from "react-hot-toast";
 const AnalyzePage = () => {
 
     const navigate = useNavigate();
@@ -52,20 +53,24 @@ const AnalyzePage = () => {
 
           const list = packetsList.filter((e) => (e.sip_info.from != null)?e.sip_info.from.includes(source):false);
           setPacketsList(list);
+          setShowDetails(true)
+          toast.success("data is filtered")
 
       }
       else if (source ===""){
 
            const list = packetsList.filter((e) => (e.sip_info.to != null)?e.sip_info.to.includes(destination):false);
            setPacketsList(list);
-
+           setShowDetails(true)
+           toast.success("data is filtered")
       }
       else{
 
 
           const list = packetsList.filter((e) => ((e.sip_info.from != null)?e.sip_info.from.includes(source):false) && ((e.sip_info.to != null)?e.sip_info.to.includes(destination):false));
           setPacketsList(list);
-
+          setShowDetails(true)
+          toast.success("data is filtered")
       }
 
 
@@ -73,6 +78,7 @@ const AnalyzePage = () => {
     }
 
     const [openm, setOpenm] = useState(false)
+    const [showDetails, setShowDetails] = useState(false)
 
     const cancelButtonRef = useRef(null)
 
@@ -130,94 +136,58 @@ const handleNav = ()=>{
                       General statistics
                       </Dialog.Title>
                       <div className="mt-2 ">
-                        <p className="text-sm text-gray-500  p-4">
-                        invite count: {data?.general_statistics?.invite_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        ack count: {data?.general_statistics?.ack_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        options count: {data?.general_statistics?.options_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        byte count: {data?.general_statistics?.bye_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        cancel count: {data?.general_statistics?.cancel_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        prack count: {data?.general_statistics?.prack_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        info count: {data?.general_statistics?.info_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        client error count: {data?.general_statistics?.client_error_count}
-                        </p>
-                        <p className="text-sm text-gray-500 p-4">
-                        server error count: {data?.general_statistics?.server_error_count}
-                        </p>
+                      {data?.general_statistics?.invite_count>0?<p className="text-sm text-gray-500  p-4">invite count: {data?.general_statistics?.invite_count} </p>:""}
+                      {data?.general_statistics?.ack_count>0?<p className="text-sm text-gray-500  p-4">ack count: {data?.general_statistics?.ack_count} </p>:""}
+                      {data?.general_statistics?.options_count>0?<p className="text-sm text-gray-500  p-4">options count: {data?.general_statistics?.options_count} </p>:""}
+                      {data?.general_statistics?.bye_count>0?<p className="text-sm text-gray-500  p-4">bye count: {data?.general_statistics?.bye_count} </p>:""}
+                      {data?.general_statistics?.cancel_count>0?<p className="text-sm text-gray-500  p-4">cancel count: {data?.general_statistics?.cancel_count} </p>:""}
+                      {data?.general_statistics?.prack_count>0?<p className="text-sm text-gray-500  p-4">prack count: {data?.general_statistics?.prack_count} </p>:""}
+                      {data?.general_statistics?.info_count>0?<p className="text-sm text-gray-500  p-4">info count: {data?.general_statistics?.info_count} </p>:""}
+                      {data?.general_statistics?.client_error_count>0?<p className="text-sm text-gray-500  p-4">client error count: {data?.general_statistics?.client_error_count} </p>:""}
+                      {data?.general_statistics?.server_error_count>0?<p className="text-sm text-gray-500  p-4">server error count: {data?.general_statistics?.server_error_count} </p>:""}
+                     
                       </div>
                       <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
                       Client errors
                       </Dialog.Title>
                       <div className="mt-2 ">
-                        <p className="text-sm text-gray-500  p-4">
-                        400 Bad Request: {data?.client_errors?.c400?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        401 Unauthorized: {data?.client_errors?.c401?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        403 Forbidden: {data?.client_errors?.c403?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        404 Not Found: {data?.client_errors?.c404?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        405 Method Not Allowed: {data?.client_errors?.c405?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        407 Proxy Authentication Required: {data?.client_errors?.c407?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        408 Request Timeout: {data?.client_errors?.c408?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        436 Bad Identity Info: {data?.client_errors?.c436?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        480 Temporarily Unavailable: {data?.client_errors?.c480?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        481 Call/Transaction Does Not Exist: {data?.client_errors?.c481?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        486 Busy Here: {data?.client_errors?.c486?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        484 Address Incomplete: {data?.client_errors?.c484?.count}
-                        </p>
-              
+                        
+                        {data?.client_errors?.c400?.count>0?<p className="text-sm text-gray-500  p-4">400 Bad Request: {data?.client_errors?.c400?.count} </p>:""}
+                        {data?.client_errors?.c401?.count>0?<p className="text-sm text-gray-500  p-4">401 Unauthorized: {data?.client_errors?.c401?.count} </p>:""}
+                        {data?.client_errors?.c403?.count>0?<p className="text-sm text-gray-500  p-4"> 403 Forbidden: {data?.client_errors?.c403?.count} </p>:""}
+                        {data?.client_errors?.c404?.count>0?<p className="text-sm text-gray-500  p-4">404 Not Found: {data?.client_errors?.c404?.count} </p>:""}
+                        {data?.client_errors?.c405?.count>0?<p className="text-sm text-gray-500  p-4">405 Method Not Allowed: {data?.client_errors?.c405?.count} </p>:""}
+                        {data?.client_errors?.c407?.count>0?<p className="text-sm text-gray-500  p-4">407 Proxy Authentication Required: {data?.client_errors?.c407?.count} </p>:""}
+                        {data?.client_errors?.c408?.count>0?<p className="text-sm text-gray-500  p-4">408 Request Timeout: {data?.client_errors?.c408?.count} </p>:""}
+                        {data?.client_errors?.c436?.count>0?<p className="text-sm text-gray-500  p-4">436 Bad Identity Info: {data?.client_errors?.c436?.count} </p>:""}
+                        {data?.client_errors?.c480?.count>0?<p className="text-sm text-gray-500  p-4">480 Temporarily Unavailable: {data?.client_errors?.c480?.count} </p>:""}
+                        {data?.client_errors?.c481?.count>0?<p className="text-sm text-gray-500  p-4">481 Call/Transaction Does Not Exist: {data?.client_errors?.c481?.count} </p>:""}
+                        {data?.client_errors?.c486?.count>0?<p className="text-sm text-gray-500  p-4">486 Busy Here: {data?.client_errors?.c486?.count} </p>:""}
+                        {data?.client_errors?.c484?.count>0?<p className="text-sm text-gray-500  p-4">484 Address Incomplete: {data?.client_errors?.c484?.count} </p>:""}
+                        {data?.client_errors?.c400?.count==0 &&
+                        data?.client_errors?.c401?.count==0 &&
+                        data?.client_errors?.c403?.count==0 &&
+                        data?.client_errors?.c404?.count==0 &&
+                        data?.client_errors?.c405?.count==0 &&
+                        data?.client_errors?.c407?.count==0 &&
+                        data?.client_errors?.c408?.count==0 &&
+                        data?.client_errors?.c436?.count==0 &&
+                        data?.client_errors?.c480?.count==0 &&
+                        data?.client_errors?.c481?.count==0 &&
+                        data?.client_errors?.c486?.count==0 &&
+                        data?.client_errors?.c484?.count==0 
+                        ?<p className="text-sm text-gray-500  p-4">There is no Client errors </p>:""}
                       
                       </div>
                       <Dialog.Title as="h3" className="text-base text-xl font-semibold leading-6 text-gray-900">
                       Server errors
                       </Dialog.Title>
                       <div className="mt-2 ">
-                        <p className="text-sm text-gray-500  p-4">
-                        500 Internal Server Error: {data?.server_errors?.c500?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        501 Not Implemented: {data?.server_errors?.c501?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        502 Bad Gateway or Proxy Error: {data?.server_errors?.c502?.count}
-                        </p>
-                        <p className="text-sm text-gray-500  p-4">
-                        503 Service Unavailable: {data?.server_errors?.c503?.count}
-                        </p>
-                       
+                      {data?.server_errors?.c500?.count>0?<p className="text-sm text-gray-500  p-4">500 Internal Server Error: {data?.server_errors?.c500?.count} </p>:""}
+                      {data?.server_errors?.c501?.count>0?<p className="text-sm text-gray-500  p-4">501 Not Implemented: {data?.server_errors?.c501?.count} </p>:""}
+                      {data?.server_errors?.c502?.count>0?<p className="text-sm text-gray-500  p-4">502 Bad Gateway or Proxy Error: {data?.server_errors?.c502?.count} </p>:""}
+                      {data?.server_errors?.c503?.count>0?<p className="text-sm text-gray-500  p-4">503 Service Unavailable: {data?.server_errors?.c503?.count} </p>:""}
+                       {data?.server_errors?.c500?.count==0&&data?.server_errors?.c501?.count==0&&data?.server_errors?.c502?.count==0&& data?.server_errors?.c503?.count==0?<p className="text-sm text-gray-500  p-4">There is no Server errors </p>:""}
               
                       
                       </div>
@@ -251,7 +221,7 @@ const handleNav = ()=>{
                 <div className="flex justify-between">
                 <a onClick={handleFilter} className="bg-black text-white py-3 w-40 rounded-lg text-center mr-8 cursor-pointer">Filter</a>
                 <a onClick={()=>setOpenm(true)} className="bg-black text-white py-3 w-40 rounded-lg text-center cursor-pointer mr-8">Statistics</a>
-                {(source!="" || destination!="")?<a  onClick={handleNav} className="bg-black text-white py-3 w-40 rounded-lg text-center cursor-pointer ">Trace Graph</a>:''}
+                {showDetails?<a  onClick={handleNav} className="bg-black text-white py-3 w-40 rounded-lg text-center cursor-pointer ">Details</a>:''}
                 </div>
             </div>
             <br/>

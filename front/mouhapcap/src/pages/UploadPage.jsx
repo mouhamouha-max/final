@@ -1,6 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import toast from "react-hot-toast";
  const UploadPage = () => {
 
 
@@ -42,28 +43,31 @@ import {useNavigate} from "react-router-dom";
     };
     const onFileUpload = async () => {
 
-
+        if (selectedFile!=null){
         // Create an object of formData
         const formData = new FormData();
 
         // Update the formData object
+        
         formData.append(
             "myFile",
             selectedFile,
-            selectedFile.name
+            selectedFile?.name
         );
-
+        
         // Details of the uploaded file
 
         // Request made to the backend api
         // Send formData object
-
+         
         const data = await axios.post("http://localhost:8000/api/upload/", formData).then(async (data) => {
 
             navigate("/analyze",{state:data.data});
 
 
-        });
+        });}else{
+            toast.error('Choose before Pressing the Upload button')
+        }
     };
     return (
        <div className="text-center mt-20">
@@ -75,7 +79,7 @@ import {useNavigate} from "react-router-dom";
                 </h3>
                 <div>
                     <input style={{marginRight:"20px"}} type="file" onChange={onFileChange} accept={".pcap"} />
-                    <button className="border-2 border-black px-8 py-4 rounded-xl" onClick={onFileUpload}>
+                    <button className=" bg-[#ea2127] text-white  px-8 py-4 rounded-xl" onClick={onFileUpload}>
                         Upload!
                     </button>
                 </div>

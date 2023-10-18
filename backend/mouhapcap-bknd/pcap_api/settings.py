@@ -75,22 +75,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pcap_api.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'mouha',
-#         'USER': 'postgres',
-#         'HOST': 'localhost',  # Adresse du serveur PostgreSQL
-#         'PORT': '5432',  # Port PostgreSQL par défaut
-#         'PASSWORD': 'mouha',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mouha',
+        'USER': 'postgres',
+        'HOST': 'localhost',  # Adresse du serveur PostgreSQL
+        'PORT': '5432',  # Port PostgreSQL par défaut
+        'PASSWORD': 'mouha',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 

@@ -147,7 +147,7 @@ const GraphPage = () => {
                         <List dense={true}>
                             {selectedList.map((e, index) => <div><ListItemButton dense={true} key={index} divider={true} sx={{ display: "inline-flex", flexDirection: "row", justifyContent: "space-evenly" }} style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", backgroundColor: "grey" }} onClick={() => handleExpand(index)}>
                                 <ListItemText >{index}</ListItemText>
-                                <ListItemText style={{ fontWeight: "bold", color: "whitesmoke", backgroundColor: "black", width: "40px" }}>{dayjs.unix(e.sip_info.time).format('DD/MM/YYYY HH:mm:ss')}</ListItemText>
+                                <ListItemText style={{ fontWeight: "bold", color: "whitesmoke",textDecoration:"underline", width: "40px" }}>{dayjs.unix(e.sip_info.time).format('DD/MM/YYYY HH:mm:ss')}</ListItemText>
                                 <ListItemText>{e.sip_info.src_ip.trim()}</ListItemText>
                                 <ListItemText>{e.sip_info.dst_ip.trim()}</ListItemText>
                                 <ListItemText>SIP/SDP</ListItemText>
