@@ -40,7 +40,7 @@
   content: '';
   position: absolute;
   left: 848px;
-  top: 36px;
+  top: 20px;
   width: 0;
   height: 0;
   border-width: 5px 0 5px 18px;
@@ -51,7 +51,7 @@
   content: '';
   position: absolute;
   left: -2px;
-  top: 36px;
+  top: 20px;
   width: 0;
   height: 0;
   border-width: 5px 18px 5px 0px;
