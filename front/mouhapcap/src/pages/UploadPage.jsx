@@ -65,7 +65,13 @@ import toast from "react-hot-toast";
             navigate("/analyze",{state:data.data});
 
 
-        });}else{
+        }).catch(error=>
+            {
+                if (error.response.status===500){
+                    toast.error("Cannot detect sip protocol")
+                }
+            })
+        ;}else{
             toast.error('Choose before Pressing the Upload button')
         }
     };

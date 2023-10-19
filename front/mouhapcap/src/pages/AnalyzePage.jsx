@@ -248,25 +248,31 @@ const handleNav = ()=>{
           <ListItemText>{e.sip_info?.body?.length}</ListItemText>
                   <ListItemText>seq_number</ListItemText>
 
-         <ListItemText>{(typeof e.sip_info.summary === 'string')?e.sip_info.summary.split(",")[0]:"NaN"}</ListItemText>
+         <ListItemText>{(typeof e.sip_info.summary === 'string')?e.sip_info.summary.split(",")[0]:"Not decodable"}</ListItemText>
 
          {buttonsMap[index] && open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
     <Collapse in={buttonsMap[index] == true && open} timeout="auto" children={
 
         <List component="div" disablePadding style={{backgroundColor:"white"}}>
-        <div style={{marginTop:"30px",marginBottom:"30px",display:"flex",flexDirection:"row"}}>
-            <div style={{marginLeft:"30px"}}>Request-Line:  </div>{(typeof e.sip_info.summary === 'string')?e.sip_info.summary.split(',').map((e)=><div style={{marginLeft:"30px"}}>{e}</div>):"empty"}
+        <div style={{marginTop:"30px",marginBottom:"30px"}}>
+            <div style={{marginLeft:"30px", color:"red",fontWeight:"bold"}}>Request-Line:  </div><div className="mt-5">{(typeof e.sip_info.summary === 'string')?e.sip_info.summary?.split(',').map((e)=><div style={{marginLeft:"30px"}}>{e}</div>):"Expert Info (Warning/Undecoded): Trailing stray characters ( check problem with WireShark )"}</div>
         </div>
 
             <div style={{marginTop:"30px",marginBottom:"30px",display:"flex",flexDirection:"column", overflow:"", justifyContent:"start", alignItems:"start"}}>
-                <div style={{marginLeft:"30px", marginBottom:"20px"}}>Message-Header:  </div>{(typeof e.sip_info.headers === 'string')?e.sip_info.headers.split('\r\n').map((e)=><div style={{marginLeft:"30px"}}>{e.trim()}</div>):"empty"}
-            </div>
+                <div style={{marginLeft:"30px", marginBottom:"20px", color:"red",fontWeight:"bold"}}>Message-Header:  </div>
+               
+
+                {e?.sip_info.headers?.split('\r\n').map((e) =>
+                                                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                                                    <div style={{ fontWeight: "bold", color: "black", marginLeft: "30px" }}>{e?.split(":")[0]}</div>
+                                                    <div style={{ marginLeft: "30px" }}>{((e?.split(":")[0]?.trim() == 'From') || (e?.split(":")[0]?.trim() == 'To')) ? e?.split(":")[2]?.split('@')[0] : e?.split(":")[1]}</div></div>)}
+                                        </div>
 
 
-            {e.sip_info.body!=""?<div style={{marginTop:"30px",marginBottom:"30px",display:"flex",flexDirection:"column", overflow:"", justifyContent:"start", alignItems:"start"}}>
-                <div style={{marginLeft:"30px"}}>Request-Body:  </div>
-                    {(typeof e.sip_info.body === 'string')?e.sip_info.body.split('\r\n').map((e)=><div style={{marginLeft:"30px"}}>{e.trim()}</div>):"empty"}
+                                        {e.sip_info.body != "" ? <div style={{ marginTop: "30px", marginBottom: "30px", display: "flex", flexDirection: "column", overflow: "", justifyContent: "start", alignItems: "start" }}> <div style={{marginLeft:"30px",color:"red",fontWeight:"bold"}}>Request-Body:  </div>
+                    {(typeof e?.sip_info.body === 'string')?e?.sip_info.body?.split('\r\n')?.map((e)=><div style={{marginLeft:"30px"}}>{e?.trim()}</div>):
+                    "Expert Info (Warning/Undecoded): Trailing stray characters ( check problem with WireShark )"}
             </div>:
                 <div></div>}
         </List>} >

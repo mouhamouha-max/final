@@ -109,7 +109,7 @@ const GraphPage = () => {
             <Divider style={{ width: "500px", margin: "auto", height: "5px", color: "black", borderBottomWidth: 5 }}></Divider>
             <br /><br /><br />
             <div className="flex justify-center">
-            <Button  variant={"contained"} style={{ backgroundColor: "black" }} onClick={handlePDFClick}>Generate PDF</Button>
+                <Button variant={"contained"} style={{ backgroundColor: "black" }} onClick={handlePDFClick}>Generate PDF</Button>
             </div>
 
             <br /><br />
@@ -120,34 +120,34 @@ const GraphPage = () => {
 
                     <div style={{ width: "50%", margin: "auto" }}>
 
-                       
-                            <div className="p-8">
+
+                        <div className="p-8">
                             <div className="flex mb-6">
-                                
-                            <div className="w-1/2 text-left ml-[-40px]">
-                            {selectedList[0].sip_info.src_ip}
+
+                                <div className="w-1/2 text-left ml-[-40px]">
+                                    {selectedList[0].sip_info.src_ip}
+                                </div>
+                                <div className="w-1/2 text-right ml-[780px]">
+                                    {selectedList[0].sip_info.dst_ip}
+                                </div>
                             </div>
-                            <div className="w-1/2 text-right ml-[780px]">
-                            {selectedList[0].sip_info.dst_ip}
-                            </div>
-                            </div>
-                            {selectedList?.map(item=>
-                            <div className="border-dashed border-r-2 border-l-2 border-black flex text-center py-6">
-                       
-                            <div className={`border-black border-b-2 w-full   relative ${item.sip_info.src_ip == selectedList[0].sip_info.src_ip?"graph_arl":"graph_arr"}`}>
-                            {item.sip_info.headers.trim().split('\r\n')[0].split(":")[0]}
-                            </div>
-                          
-                            </div>
-                                )}
-                            </div>
-                            </div>
+                            {selectedList?.map(item =>
+                                <div className="border-dashed border-r-2 border-l-2 border-black flex text-center py-6">
+
+                                    <div className={`border-black border-b-2 w-full   relative ${item.sip_info.src_ip == selectedList[0].sip_info.src_ip ? "graph_arl" : "graph_arr"}`}>
+                                        {item.sip_info.headers.trim().split('\r\n')[0].split(":")[0]}
+                                    </div>
+
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     <div style={{ width: "100%", flex: 1 }}>
 
                         <List dense={true}>
                             {selectedList.map((e, index) => <div><ListItemButton dense={true} key={index} divider={true} sx={{ display: "inline-flex", flexDirection: "row", justifyContent: "space-evenly" }} style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", backgroundColor: "grey" }} onClick={() => handleExpand(index)}>
                                 <ListItemText >{index}</ListItemText>
-                                <ListItemText style={{ fontWeight: "bold", color: "whitesmoke",textDecoration:"underline", width: "40px" }}>{dayjs.unix(e.sip_info.time).format('DD/MM/YYYY HH:mm:ss')}</ListItemText>
+                                <ListItemText style={{ fontWeight: "bold", color: "whitesmoke", textDecoration: "underline", width: "40px" }}>{dayjs.unix(e.sip_info.time).format('DD/MM/YYYY HH:mm:ss')}</ListItemText>
                                 <ListItemText>{e.sip_info.src_ip.trim()}</ListItemText>
                                 <ListItemText>{e.sip_info.dst_ip.trim()}</ListItemText>
                                 <ListItemText>SIP/SDP</ListItemText>
@@ -161,8 +161,8 @@ const GraphPage = () => {
                                 <Collapse in={buttonsMap[index] == true && open} timeout="auto" children={
 
                                     <List component="div" disablePadding style={{ backgroundColor: "white" }}>
-                                        <div style={{ marginTop: "30px", marginBottom: "30px", display: "flex", flexDirection: "row" }}>
-                                            <div style={{ marginLeft: "30px", color: "red", fontWeight: "bold" }}>Request-Line:  </div>{e.sip_info.summary.split(',').map((e) => <div style={{ marginLeft: "30px" }}>{e}</div>)}
+                                        <div style={{ marginTop: "30px", marginBottom: "30px", }}>
+                                            <div style={{ marginTop: "30px", marginLeft: "30px", color: "red", fontWeight: "bold" }}>Request-Line:  </div><div className="mt-6">{e.sip_info.summary.split(',').map((e) => <div style={{ marginLeft: "30px" }}>{e}</div>)}</div>
                                         </div>
 
                                         <div style={{ marginTop: "30px", marginBottom: "30px", display: "flex", flexDirection: "column", overflow: "", justifyContent: "start", alignItems: "start" }}>
@@ -171,7 +171,9 @@ const GraphPage = () => {
 
 
                                             {e.sip_info.headers.split('\r\n').map((e) =>
-                                                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}><div style={{ fontWeight: "bold", color: "black", marginLeft: "30px" }}>{e.split(":")[0]}</div><div style={{ marginLeft: "30px" }}>{((e.split(":")[0].trim() == 'From') || (e.split(":")[0].trim() == 'To')) ? e.split(":")[2] : e.split(":")[1]}</div></div>)}
+                                                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                                                    <div style={{ fontWeight: "bold", color: "black", marginLeft: "30px" }}>{e.split(":")[0]}</div>
+                                                    <div style={{ marginLeft: "30px" }}>{((e.split(":")[0].trim() == 'From') || (e.split(":")[0].trim() == 'To')) ? e.split(":")[2].split('@')[0] : e.split(":")[1]}</div></div>)}
                                         </div>
 
 

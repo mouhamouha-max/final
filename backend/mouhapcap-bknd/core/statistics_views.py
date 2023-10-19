@@ -5,29 +5,29 @@ from .views import UploadAndAnalyzePCAPView
 
 # Dictionnaire de descriptions pour les codes d'erreur
 error_descriptions = {
-    "400": "Bad Request",
-    "401": "Unauthorized",
-    "403": "Forbidden",
-    "404": "Not Found",
-    "405": "Method Not Allowed",
-    "407": "Proxy Authentication Required",
-    "408": "Request Timeout",
-    "436": "Bad Identity Info",
-    "480": "Temporarily Unavailable",
-    "481": "Call/Transaction Does Not Exist",
-    "486": "Busy Here",
-    "484": "Address Incomplete",
-    "500": "Internal Server Error",
-    "501": "Not Implemented",
-    "502": "Bad Gateway or Proxy Error",
-    "503": "Service Unavailable",
+    "c400": "Bad Request",
+    "c401": "Unauthorized",
+    "c403": "Forbidden",
+    "c404": "Not Found",
+    "c405": "Method Not Allowed",
+    "c407": "Proxy Authentication Required",
+    "c408": "Request Timeout",
+    "c436": "Bad Identity Info",
+    "c480": "Temporarily Unavailable",
+    "c481": "Call/Transaction Does Not Exist",
+    "c486": "Busy Here",
+    "c484": "Address Incomplete",
+    "c500": "Internal Server Error",
+    "c501": "Not Implemented",
+    "c502": "Bad Gateway or Proxy Error",
+    "c503": "Service Unavailable",
 }
 
 class StatisticsView(APIView):
     def count_error_occurrences(self, response_status, error_counts):
         # Supprimer le préfixe "C" et convertir la clé en minuscules pour normaliser la casse
            response_status = response_status
-    
+        
            if response_status in error_counts:
                  error_counts[response_status] += 1
            else:
@@ -50,8 +50,8 @@ class StatisticsView(APIView):
         
 
         # Initialisation des compteurs d'erreurs client et serveur
-        client_error_counts = {code: 0 for code in error_descriptions if code.startswith("4")}
-        server_error_counts = {code: 0 for code in error_descriptions if code.startswith("5")}
+        client_error_counts = {code: 0 for code in error_descriptions if code.startswith("c4")}
+        server_error_counts = {code: 0 for code in error_descriptions if code.startswith("c5")}
 
         # Initialisation d'un dictionnaire pour compter les occurrences de chaque code d'erreur
         error_occurrences = {code: 0 for code in error_descriptions}
@@ -80,12 +80,12 @@ class StatisticsView(APIView):
             # Calcul des erreurs client
             if response_status and response_status.startswith('4'):
                 client_error_count += 1
-                self.count_error_occurrences(response_status, client_error_counts)
+                self.count_error_occurrences("c"+response_status, client_error_counts)
 
             # Calcul des erreurs serveur
             if response_status and response_status.startswith('5'):
                 server_error_count += 1
-                self.count_error_occurrences(response_status, server_error_counts)
+                self.count_error_occurrences("c"+response_status, server_error_counts)
 
             # Comptage des occurrences de chaque code d'erreur
             self.count_error_occurrences(response_status, error_occurrences)
