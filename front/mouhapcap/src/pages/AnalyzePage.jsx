@@ -232,22 +232,22 @@ const handleNav = ()=>{
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader  sx={{marginLeft:"-150px",display:"flex",flexDirection: "row", justifyContent:"space-evenly"}}  style={{flexDirection:"row",display:"flex",justifyContent:"space-evenly", alignContent:"space-evenly", backgroundColor:"grey"}} inset={true} component="div" id="nested-list-subheader" children={headers.map((e)=><div style={{width:"150px",display:"inline", flex:"auto", fontWeight:"bold"}}>{"| "+e+" "}</div>)}>
+        <ListSubheader  sx={{marginLeft:"-150px",display:"flex",flexDirection: "row", justifyContent:"space-evenly"}}  style={{flexDirection:"row",display:"flex",justifyContent:"space-evenly", alignContent:"space-evenly", backgroundColor:"grey",textAlign:"start"}} inset={true} component="div" id="nested-list-subheader" children={headers.map((e)=><div style={{width:"150px",display:"inline", flex:"auto", fontWeight:"bold"}}>{"| "+e+" "}</div>)}>
         </ListSubheader>
       }
 >
 
-    {packetsList.map((e, index)=><div><ListItemButton dense={true} key={index} divider={true} sx={{display:"flex",flexDirection:"row",justifyContent:"space-evenly"}} style={{display:"flex",flexDirection:"row",justifyContent:"space-evenly"}} onClick={()=>handleClick(index)}>
+    {packetsList.map((e, index)=><div className="border-4"><ListItemButton dense={true} key={index} divider={true} sx={{display:"flex",flexDirection:"row",justifyContent:"center",textAlign:"start"}} style={{display:"flex",flexDirection:"row",justifyContent:"center",textAlign:"start"}} onClick={()=>handleClick(index)}>
         <ListItemText style={{overflow:"clip"}} >{index}</ListItemText>
      <ListItemText style={{overflow:"clip"}}>{dayjs.unix(e.sip_info.time).format('DD/MM/YYYY HH:mm:ss')}</ListItemText>
         <ListItemText style={{overflow:"clip"}}>{e.sip_info.src_ip.trim()}</ListItemText>
       <ListItemText style={{overflow:"clip"}}>{e.sip_info.dst_ip.trim()}</ListItemText>
          <ListItemText>SIP/SDP</ListItemText>
           <ListItemText>{e.sip_info?.body?.length}</ListItemText>
-                  <ListItemText>seq_number</ListItemText>
+              
 
-         <ListItemText>{(typeof e.sip_info.summary === 'string')?e.sip_info.summary.split(",")[0]:"Not decodable"}</ListItemText>
-
+         <ListItemText >{(typeof e.sip_info.summary === 'string')?e.sip_info.headers?.split('\r\n')[0]?.split(':')[0]+" "+(e?.sip_info.headers?.split('\r\n')[0]?.split(':')[1]?.split('@')[0]?e?.sip_info.headers?.split('\r\n')[0]?.split(':')[1]?.split('@')[0]?.split(';')[0]:''):"Not decodable"}</ListItemText>
+         
          {buttonsMap[index] && open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
     <Collapse in={buttonsMap[index] == true && open} timeout="auto" children={

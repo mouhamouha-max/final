@@ -154,7 +154,7 @@ const GraphPage = () => {
                                 <ListItemText>{e.sip_info.body.length}</ListItemText>
                                 <ListItemText>seq_number</ListItemText>
 
-                                <ListItemText>{e.sip_info.summary.split(",")[0]}</ListItemText>
+                                <ListItemText>{e.sip_info.headers?.split('\r\n')[0]?.split(':')[0]+" "+(e?.sip_info.headers?.split('\r\n')[0]?.split(':')[1]?.split('@')[0]?e?.sip_info.headers?.split('\r\n')[0]?.split(':')[1]?.split('@')[0]?.split(';')[0]:'')}</ListItemText>
 
                                 {buttonsMap[index] && open ? <ExpandLess /> : <ExpandMore />}
                             </ListItemButton>
